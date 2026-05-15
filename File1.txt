@@ -1,0 +1,44 @@
+import time
+import random
+import sys
+
+sys.setrecursionlimit(10_000_000)
+
+def merge(A, p, q, r):
+    left = A[p:q+1]
+    right = A[q+1:r+1]
+    i = j = 0
+    k = p
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            A[k] = left[i]
+            i += 1
+        else:
+            A[k] = right[j]
+            j += 1
+        k += 1
+    while i < len(left):
+        A[k] = left[i]
+        i += 1
+        k += 1
+    while j < len(right):
+        A[k] = right[j]
+        j += 1
+        k += 1
+
+def mergeSort(A, p, r):
+    if p < r:
+        q = (p + r) // 2
+        mergeSort(A, p, q)
+        mergeSort(A, q+1, r)
+        merge(A, p, q, r)
+
+# ------- Auto Generate 10,000,000 random inputs -------
+A = random.sample(range(1, 10_000_001), 10_000_000)
+print("Test: Random 10,000,000 elements")
+
+start_time = time.perf_counter()
+mergeSort(A, 0, len(A) - 1)
+end_time = time.perf_counter()
+
+print(f"Time taken: {(end_time - start_time):.6f} seconds")
